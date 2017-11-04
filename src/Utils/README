@@ -1,0 +1,4 @@
+Q: How does jM3 handles creating cubes?
+A: When we create a cube with values (1,1,1), it means 1 in every direction,
+    FROM the origin. So the length of a width/height/depth is 2*1 => 2;
+    That's why sometimes we have to multiply by 2 to put one cube over the another.

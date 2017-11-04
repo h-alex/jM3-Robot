@@ -1,3 +1,5 @@
+package Controller;
+
 import Model.Body;
 import Model.Head;
 import Model.Limb;
@@ -10,8 +12,8 @@ import com.jme3.scene.Node;
  */
 public class Robot {
     private Node rootNode; // Center of our robot
-    private AssetManager assetManager;
     public Vector3f center;
+    public AssetManager assetManager;
 
     private Head head;
     private Body body;
@@ -32,7 +34,11 @@ public class Robot {
 
     public void assembleRobot() {
         body = new Body(this.center, this.assetManager);
-        body.attach(this.rootNode);
+        head = new Head(this.center, this.assetManager);
+
+
+        head.attachParent(this.rootNode);
+        body.attachParent(this.rootNode);
     }
 
 

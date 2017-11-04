@@ -32,7 +32,7 @@ public class Body {
 
     }
 
-    public void attach(Node node) {
+    public void attachParent(Node node) {
         node.attachChild(body.geometry);
     }
 }
