@@ -5,8 +5,8 @@ import com.jme3.math.Vector3f;
 
 
 public class Main extends SimpleApplication {
-    XYZAxes xyzAxes;
-    Robot robot;
+    private XYZAxes xyzAxes;
+    private Robot robot;
 
 
     public static void main(String[] args) {
@@ -22,6 +22,7 @@ public class Main extends SimpleApplication {
         xyzAxes = new XYZAxes(this.assetManager);
         xyzAxes.attachCoordinateAxes(rootNode);
         robot.assembleRobot();
+        robot.rotateLeftArm(-45f, 0f, 0f);
         //robot.rotate(.45f, 0f, 0f);
     }
 }

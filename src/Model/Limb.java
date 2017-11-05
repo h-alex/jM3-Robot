@@ -10,11 +10,7 @@ import com.jme3.scene.Geometry;
 import com.jme3.scene.Node;
 import com.jme3.scene.shape.Box;
 import com.jme3.scene.shape.Sphere;
-import com.sun.javaws.Main;
 
-/**
- * Created by alex on 04.11.2017.
- */
 public class Limb {
     private static final ColorRGBA UPPER_PART_COLOR = ColorRGBA.Brown;
     private static final ColorRGBA LOWER_PART_COLOR = ColorRGBA.Blue;
@@ -34,10 +30,9 @@ public class Limb {
      * @param upperPartSize : The size of the upper part of the limb
      * @param lowerPartSize : the size of the lower part of the limb
      */
-    public Limb(Vector3f startPosition, AssetManager assetManager, Vector3f upperPartSize, Vector3f lowerPartSize) {
+    public Limb(Vector3f startPosition, Node rootNode, AssetManager assetManager, Vector3f upperPartSize, Vector3f lowerPartSize) {
         upperPivot = new Node("upperPivot");
         upperPivot.setLocalTranslation(startPosition);
-
         /* Upper Sphere */
         upperSphere = new PivotSphere();
         upperSphere.sphere = new Sphere(10, 100, PivotSphere.PIVOT_SPHERE_RADIUS);
@@ -45,7 +40,7 @@ public class Limb {
         upperSphere.material = new Material(assetManager, Utils.ACCES_MANAGER_LINK);
         upperSphere.material.setColor("Color", ColorRGBA.White);
         upperSphere.geometry.setMaterial(upperSphere.material);
-        upperSphere.geometry.setLocalTranslation(startPosition);
+        upperSphere.geometry.setLocalTranslation(Vector3f.ZERO);
 
         /* Upper Limb */
         upperPart = new BodyPart();
@@ -58,17 +53,11 @@ public class Limb {
         upperPart.material = new Material(assetManager, Utils.ACCES_MANAGER_LINK);
         upperPart.material.setColor("Color", UPPER_PART_COLOR);
         upperPart.geometry.setMaterial(upperPart.material);
-        upperPart.geometry.setLocalTranslation(
-                startPosition.x,
-                startPosition.y - upperPartSize.y,
-                startPosition.z
-        );
+        upperPart.geometry.setLocalTranslation(0, -upperPartSize.y, 0);
 
         /* Lower Sphere */
-
-        startPosition.y = startPosition.y - upperPartSize.y * 2f;
         lowerPivot = new Node("lowerPivot");
-        lowerPivot.setLocalTranslation(startPosition);
+        lowerPivot.setLocalTranslation(0, -2*upperPartSize.y, 0);
 
         lowerSphere = new PivotSphere();
         lowerSphere.sphere = new Sphere(10, 100, PivotSphere.PIVOT_SPHERE_RADIUS);
@@ -76,7 +65,7 @@ public class Limb {
         lowerSphere.material = new Material(assetManager, Utils.ACCES_MANAGER_LINK);
         lowerSphere.material.setColor("Color", ColorRGBA.White);
         lowerSphere.geometry.setMaterial(upperSphere.material);
-        lowerSphere.geometry.setLocalTranslation(startPosition);
+        lowerSphere.geometry.setLocalTranslation(Vector3f.ZERO);
 
         /* Lower Part */
         lowerPart = new BodyPart();
@@ -89,20 +78,23 @@ public class Limb {
         lowerPart.material = new Material(assetManager, Utils.ACCES_MANAGER_LINK);
         lowerPart.material.setColor("Color", LOWER_PART_COLOR);
         lowerPart.geometry.setMaterial(lowerPart.material);
-        lowerPart.geometry.setLocalTranslation(
-                startPosition.x,
-                startPosition.y - lowerPartSize.y ,
-                startPosition.z
-        );
+        lowerPart.geometry.setLocalTranslation(0, -lowerPartSize.y, 0);
 
 
     }
 
-    public void attachParent(Node node) {
+    public void attachParent(Node node) {/*
         node.attachChild(upperSphere.geometry);
         node.attachChild(lowerSphere.geometry);
         node.attachChild(upperPart.geometry);
         node.attachChild(lowerPart.geometry);
+        */
+        this.upperPivot.attachChild(upperSphere.geometry);
+        this.upperPivot.attachChild(upperPart.geometry);
+        this.lowerPivot.attachChild(lowerPart.geometry);
+        this.lowerPivot.attachChild(lowerSphere.geometry);
+        this.upperPivot.attachChild(lowerPivot);
+        node.attachChild(upperPivot);
     }
 
     public void rotateUpperPivot(float x, float y, float z) {

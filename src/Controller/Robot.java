@@ -8,14 +8,11 @@ import com.jme3.asset.AssetManager;
 import com.jme3.math.Vector3f;
 import com.jme3.scene.Node;
 
-/**
- * Created by alex on 04.11.2017.
- */
 public class Robot {
 
     private Node rootNode; // Center of our robot
     private Vector3f center;
-    public AssetManager assetManager;
+    private AssetManager assetManager;
 
     private Head head;
     private Body body;
@@ -43,20 +40,20 @@ public class Robot {
         startPosition.x = center.x + body.getWidth() + BodyPart.ARM_SIZE.x;
         startPosition.y = center.y + body.getHeight();
         startPosition.z = center.z;
-        leftArm = new Limb(startPosition.clone(), assetManager, BodyPart.ARM_SIZE, BodyPart.FOREARM_SIZE);
+        leftArm = new Limb(startPosition.clone(), rootNode, assetManager, BodyPart.ARM_SIZE, BodyPart.FOREARM_SIZE);
 
         /* Right Arm */
         startPosition.x = -startPosition.x;         // we only need to mirror the X for the other arm.
-        rightArm = new Limb(startPosition.clone(), assetManager, BodyPart.ARM_SIZE, BodyPart.FOREARM_SIZE);
+        rightArm = new Limb(startPosition.clone(), rootNode, assetManager, BodyPart.ARM_SIZE, BodyPart.FOREARM_SIZE);
 
         /* Left Foot */
         startPosition.x = center.x + body.getWidth() - BodyPart.FOOT_SIZE.x;
         startPosition.y *= -1;                       // we mirror the value because we start from BOTTOM now
-        leftFoot = new Limb(startPosition.clone(), assetManager, BodyPart.FOOT_SIZE, BodyPart.FOREFOOT_SIZE);
+        leftFoot = new Limb(startPosition.clone(), rootNode, assetManager, BodyPart.FOOT_SIZE, BodyPart.FOREFOOT_SIZE);
 
         /* Right Foot */
         startPosition.x *= -1;
-        rightFoot = new Limb(startPosition.clone(), assetManager, BodyPart.FOOT_SIZE, BodyPart.FOREFOOT_SIZE);
+        rightFoot = new Limb(startPosition.clone(), rootNode, assetManager, BodyPart.FOOT_SIZE, BodyPart.FOREFOOT_SIZE);
 
 
         /* Now we attach the parts. */
@@ -68,6 +65,11 @@ public class Robot {
         rightFoot.attachParent(this.rootNode);
     }
 
+
+    public void rotateLeftArm(float x, float y, float z){
+        this.leftArm.rotateUpperPivot(x,y,z);
+        this.leftArm.rotateLowerPivot(-x*1.5f, -y*1.5f, -z*1.5f);
+    }
 
     public void rotate(float x, float y, float z) {
         this.rootNode.rotate(x, y, z);
