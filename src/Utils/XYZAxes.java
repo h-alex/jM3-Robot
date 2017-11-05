@@ -1,3 +1,5 @@
+package Utils;
+
 import com.jme3.asset.AssetManager;
 import com.jme3.material.Material;
 import com.jme3.math.ColorRGBA;
@@ -11,7 +13,8 @@ import com.jme3.scene.debug.Arrow;
  * Created by alex on 04.11.2017.
  */
 public class XYZAxes {
-    private static float AXE_LENGTH = 7.5f;
+    private static final int ARROW_THICKNESS = 1;
+    private static final float AXE_LENGTH = 7.5f;
     AssetManager assetManager;
 
     public XYZAxes(AssetManager assetManager) {
@@ -29,30 +32,30 @@ public class XYZAxes {
 
     public void attachCoordinateAxes(Node n) {
         Arrow arrow = new Arrow(new Vector3f(AXE_LENGTH, 0f, 0f));
-        arrow.setLineWidth(2); // make arrow thicker
+        arrow.setLineWidth(ARROW_THICKNESS); // make arrow thicker
         putShape(n, arrow, ColorRGBA.White);
 
 
 
         arrow = new Arrow(new Vector3f(-1 * AXE_LENGTH,0f, 0f));
-        arrow.setLineWidth(2); // make arrow thicker
+        arrow.setLineWidth(ARROW_THICKNESS); // make arrow thicker
         putShape(n, arrow, ColorRGBA.White);
 
 
         arrow = new Arrow(new Vector3f(0f, AXE_LENGTH, 0f));
-        arrow.setLineWidth(2); // make arrow thicker
+        arrow.setLineWidth(ARROW_THICKNESS); // make arrow thicker
         putShape(n, arrow, ColorRGBA.White);
 
         arrow = new Arrow(new Vector3f(0f, -1 * AXE_LENGTH, 0f));
-        arrow.setLineWidth(2); // make arrow thicker
+        arrow.setLineWidth(ARROW_THICKNESS); // make arrow thicker
         putShape(n, arrow, ColorRGBA.White);
 
         arrow = new Arrow(new Vector3f(0f, 0f, AXE_LENGTH));
-        arrow.setLineWidth(2); // make arrow thicker
+        arrow.setLineWidth(ARROW_THICKNESS); // make arrow thicker
         putShape(n, arrow, ColorRGBA.White);
 
         arrow = new Arrow(new Vector3f(0f, 0f, -1 * AXE_LENGTH));
-        arrow.setLineWidth(2); // make arrow thicker
+        arrow.setLineWidth(ARROW_THICKNESS); // make arrow thicker
         putShape(n, arrow, ColorRGBA.White);
     }
 }

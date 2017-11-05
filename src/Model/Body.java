@@ -35,4 +35,17 @@ public class Body {
     public void attachParent(Node node) {
         node.attachChild(body.geometry);
     }
+
+    public float getWidth() {
+        return body.box.xExtent;
+    }
+
+    public float getHeight() {
+        return body.box.yExtent;
+    }
+
+    public float getDepth() {
+        return body.box.zExtent;
+    }
+
 }

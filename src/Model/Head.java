@@ -1,6 +1,7 @@
 package Model;
 
 import Controller.Robot;
+import Utils.Utils;
 import com.jme3.asset.AssetManager;
 import com.jme3.material.Material;
 import com.jme3.math.ColorRGBA;
@@ -34,7 +35,7 @@ public class Head {
         );
 
         neck.geometry = new Geometry("neck", neck.box);
-        neck.material = new Material(assetManager, "Common/MatDefs/Misc/Unshaded.j3md");
+        neck.material = new Material(assetManager, Utils.ACCES_MANAGER_LINK);
         neck.material.setColor("Color", NECK_COLOR);
         neck.geometry.setMaterial(neck.material);
         // setting position of the neck
@@ -51,7 +52,7 @@ public class Head {
         );
 
         head.geometry = new Geometry("head", head.box);
-        head.material = new Material(assetManager, "Common/MatDefs/Misc/Unshaded.j3md");
+        head.material = new Material(assetManager, Utils.ACCES_MANAGER_LINK);
         head.material.setColor("Color", HEAD_COLOR);
         head.geometry.setMaterial(head.material);
         // setting position of the head

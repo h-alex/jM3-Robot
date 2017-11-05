@@ -1,4 +1,5 @@
 import Controller.Robot;
+import Utils.XYZAxes;
 import com.jme3.app.SimpleApplication;
 import com.jme3.math.Vector3f;
 
@@ -20,7 +21,7 @@ public class Main extends SimpleApplication {
         robot = new Robot(rootNode, assetManager, Vector3f.ZERO);
         xyzAxes = new XYZAxes(this.assetManager);
         xyzAxes.attachCoordinateAxes(rootNode);
-
         robot.assembleRobot();
+        //robot.rotate(.45f, 0f, 0f);
     }
 }
