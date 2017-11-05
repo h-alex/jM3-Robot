@@ -21,7 +21,7 @@ public class Main extends SimpleApplication {
     public void simpleInitApp() {
         // Test multiple inputs per mapping
 
-        cam.setLocation(new Vector3f(0f, 1f, 5f));
+        cam.setLocation(new Vector3f(10f, 5f, 10f));
         robot = new Robot(rootNode, assetManager, Vector3f.ZERO);
         xyzAxes = new XYZAxes(this.assetManager);
         xyzAxes.attachCoordinateAxes(rootNode);
@@ -30,8 +30,8 @@ public class Main extends SimpleApplication {
     }
 
     private void addActionListeners() {
-        inputManager.addMapping("move_forward", new KeyTrigger(KeyInput.KEY_K));
-        inputManager.addMapping("move_backward", new KeyTrigger(KeyInput.KEY_J));
+        inputManager.addMapping("move_forward", new KeyTrigger(KeyInput.KEY_J));
+        inputManager.addMapping("move_backward", new KeyTrigger(KeyInput.KEY_K));
 
         inputManager.addListener(analogListener, new String[]{"move_forward", "move_backward"});
     }
@@ -42,8 +42,10 @@ public class Main extends SimpleApplication {
         public void onAnalog(String name, float value, float tpf) {
             if (name.equals("move_forward")){
                 System.out.println("We are moving forward: name= " + name + " | value= " + value + " | tpf= " + tpf);
+                robot.moveRobotForward(value  * speed);
             } else if (name.equals("move_backward")){
                 System.out.println("We are moving backwards: name= " + name + " | value= " + value + " | tpf= " + tpf);
+                robot.moveRobotBackward(value * speed);
             }
         }
     };

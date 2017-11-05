@@ -5,10 +5,13 @@ import Model.BodyPart;
 import Model.Head;
 import Model.Limb;
 import com.jme3.asset.AssetManager;
+import com.jme3.math.FastMath;
 import com.jme3.math.Vector3f;
 import com.jme3.scene.Node;
 
 public class Robot {
+    public static final float MOVEMENT_SPEED = .05f;
+
 
     private Node rootNode; // Center of our robot
     private Vector3f center;
@@ -23,6 +26,9 @@ public class Robot {
     private Limb leftFoot;
     private Limb rightFoot;
 
+
+    private float handsAngle = 0f;
+    private float feetAngle = 0f;
 
     public Robot(Node node, AssetManager assetManager, Vector3f center) {
         this.rootNode = node.clone(false);
@@ -66,13 +72,49 @@ public class Robot {
     }
 
 
-    public void rotateLeftArm(float x, float y, float z){
-        this.leftArm.rotateUpperPivot(x,y,z);
-        this.leftArm.rotateLowerPivot(-x*1.5f, -y*1.5f, -z*1.5f);
+    private void rotateLeftArm(float x, float y, float z) {
+        this.leftArm.rotateUpperPivot(x, y, z);
+        this.leftArm.rotateLowerPivot(-x * 1.5f, -y * 1.5f, -z * 1.5f);
     }
 
     public void rotate(float x, float y, float z) {
         this.rootNode.rotate(x, y, z);
     }
 
+
+    public void moveRobotForward(float speed) {
+        System.out.println("Angle of rotation:" + leftArm.getRotationInDegrees());
+
+        rootNode.move(0, 0, .03f);
+
+        leftArm.rotateUpperPivot(-speed, 0, 0);
+        leftArm.rotateLowerPivot(-speed, 0, 0);
+        rightArm.rotateUpperPivot(speed, 0, 0);
+        rightArm.rotateLowerPivot(speed, 0, 0);
+
+        rightFoot.rotateUpperPivot(-speed, 0, 0);
+        rightFoot.rotateLowerPivot(speed*1.5f,0,0);
+        leftFoot.rotateUpperPivot(speed, 0, 0);
+        leftFoot.rotateLowerPivot(-speed*1.5f,0,0);
+    }
+
+
+    public void moveRobotBackward(float speed) {
+
+        System.out.println("Angle of rotation:" + leftArm.getRotationInDegrees());
+        leftArm.rotateUpperPivot(speed, 0, 0);
+        leftArm.rotateLowerPivot(speed, 0, 0);
+
+        rightArm.rotateUpperPivot(-speed, 0, 0);
+        rightArm.rotateLowerPivot(-speed, 0, 0);
+
+
+        rightFoot.rotateUpperPivot(speed, 0, 0);
+        rightFoot.rotateLowerPivot(-speed*1.5f,0,0);
+        leftFoot.rotateUpperPivot(-speed, 0, 0);
+
+        rootNode.move(0, 0, -.03f);
+
+        leftFoot.rotateLowerPivot(speed*1.5f,0,0);
+    }
 }

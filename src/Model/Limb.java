@@ -1,15 +1,16 @@
 package Model;
 
-import Controller.Robot;
 import Utils.Utils;
 import com.jme3.asset.AssetManager;
 import com.jme3.material.Material;
 import com.jme3.math.ColorRGBA;
+import com.jme3.math.Quaternion;
 import com.jme3.math.Vector3f;
 import com.jme3.scene.Geometry;
 import com.jme3.scene.Node;
 import com.jme3.scene.shape.Box;
 import com.jme3.scene.shape.Sphere;
+import Utils.XYZAxes;
 
 public class Limb {
     private static final ColorRGBA UPPER_PART_COLOR = ColorRGBA.Brown;
@@ -33,6 +34,8 @@ public class Limb {
     public Limb(Vector3f startPosition, Node rootNode, AssetManager assetManager, Vector3f upperPartSize, Vector3f lowerPartSize) {
         upperPivot = new Node("upperPivot");
         upperPivot.setLocalTranslation(startPosition);
+
+        //new XYZAxes(assetManager).attachCoordinateAxes(upperPivot);
         /* Upper Sphere */
         upperSphere = new PivotSphere();
         upperSphere.sphere = new Sphere(10, 100, PivotSphere.PIVOT_SPHERE_RADIUS);
@@ -57,7 +60,7 @@ public class Limb {
 
         /* Lower Sphere */
         lowerPivot = new Node("lowerPivot");
-        lowerPivot.setLocalTranslation(0, -2*upperPartSize.y, 0);
+        lowerPivot.setLocalTranslation(0, -2 * upperPartSize.y, 0);
 
         lowerSphere = new PivotSphere();
         lowerSphere.sphere = new Sphere(10, 100, PivotSphere.PIVOT_SPHERE_RADIUS);
@@ -80,15 +83,9 @@ public class Limb {
         lowerPart.geometry.setMaterial(lowerPart.material);
         lowerPart.geometry.setLocalTranslation(0, -lowerPartSize.y, 0);
 
-
     }
 
-    public void attachParent(Node node) {/*
-        node.attachChild(upperSphere.geometry);
-        node.attachChild(lowerSphere.geometry);
-        node.attachChild(upperPart.geometry);
-        node.attachChild(lowerPart.geometry);
-        */
+    public void attachParent(Node node) {
         this.upperPivot.attachChild(upperSphere.geometry);
         this.upperPivot.attachChild(upperPart.geometry);
         this.lowerPivot.attachChild(lowerPart.geometry);
@@ -103,5 +100,9 @@ public class Limb {
 
     public void rotateLowerPivot(float x, float y, float z) {
         lowerPivot.rotate(x, y, z);
+    }
+
+    public float getRotationInDegrees() {
+        return this.upperPivot.getLocalRotation().toAngles(null)[0];
     }
 }
