@@ -4,6 +4,7 @@ import Model.Body;
 import Model.BodyPart;
 import Model.Head;
 import Model.Limb;
+import Utils.Utils;
 import com.jme3.asset.AssetManager;
 import com.jme3.math.FastMath;
 import com.jme3.math.Vector3f;
@@ -28,7 +29,7 @@ public class Robot {
 
 
     private float handsAngle = 0f;
-    private float feetAngle = 0f;
+    private float direction = -1;
 
     public Robot(Node node, AssetManager assetManager, Vector3f center) {
         this.rootNode = node.clone(false);
@@ -83,38 +84,40 @@ public class Robot {
 
 
     public void moveRobotForward(float speed) {
-        System.out.println("Angle of rotation:" + leftArm.getRotationInDegrees());
-
-        rootNode.move(0, 0, .03f);
-
-        leftArm.rotateUpperPivot(-speed, 0, 0);
-        leftArm.rotateLowerPivot(-speed, 0, 0);
-        rightArm.rotateUpperPivot(speed, 0, 0);
-        rightArm.rotateLowerPivot(speed, 0, 0);
-
-        rightFoot.rotateUpperPivot(-speed, 0, 0);
-        rightFoot.rotateLowerPivot(speed*1.5f,0,0);
-        leftFoot.rotateUpperPivot(speed, 0, 0);
-        leftFoot.rotateLowerPivot(-speed*1.5f,0,0);
+        System.out.println("Angle of rotation: \n\t RAD:" + leftArm.getRotationInRadForUpperPivot() + "\n\t DEG:" + leftArm.getRotationInRadForUpperPivot() * FastMath.RAD_TO_DEG);
+        moveRobot(speed);
     }
 
 
     public void moveRobotBackward(float speed) {
-
-        System.out.println("Angle of rotation:" + leftArm.getRotationInDegrees());
-        leftArm.rotateUpperPivot(speed, 0, 0);
-        leftArm.rotateLowerPivot(speed, 0, 0);
-
-        rightArm.rotateUpperPivot(-speed, 0, 0);
-        rightArm.rotateLowerPivot(-speed, 0, 0);
+        moveRobot(-1.0f * speed);
+    }
 
 
-        rightFoot.rotateUpperPivot(speed, 0, 0);
-        rightFoot.rotateLowerPivot(-speed*1.5f,0,0);
-        leftFoot.rotateUpperPivot(-speed, 0, 0);
+    private void moveRobot(float speed){
+        handsAngle = leftArm.getRotationInRadForUpperPivot();
+        if (FastMath.abs(handsAngle) > Utils.DEG_45_TO_RAD) {
+            direction *= -1;
+        }
+        leftArm.rotateUpperPivotAroundX(direction * speed);
+        rightFoot.rotateUpperPivotAroundX(direction * speed);
 
-        rootNode.move(0, 0, -.03f);
+        rightArm.rotateUpperPivotAroundX(-1 * direction * speed);
+        leftFoot.rotateUpperPivotAroundX(-1 * direction * speed);
 
-        leftFoot.rotateLowerPivot(speed*1.5f,0,0);
+        if (handsAngle < 0) {
+            leftArm.rotateLowerPivotAroundX(direction * speed * 1.5f);
+            rightFoot.rotateLowerPivotAroundX(-1 * direction * speed * 1.5f);
+            rightArm.resetLowerPivot();
+            leftFoot.resetLowerPivot();
+        } else {
+            rightArm.rotateLowerPivotAroundX(-1*direction * speed * 1.5f);
+            leftFoot.rotateLowerPivotAroundX(direction * speed * 1.5f);
+
+            leftArm.resetLowerPivot();
+            rightFoot.resetLowerPivot();
+        }
+
+        this.rootNode.move(0, 0, speed);
     }
 }

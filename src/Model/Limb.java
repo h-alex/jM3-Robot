@@ -4,6 +4,7 @@ import Utils.Utils;
 import com.jme3.asset.AssetManager;
 import com.jme3.material.Material;
 import com.jme3.math.ColorRGBA;
+import com.jme3.math.FastMath;
 import com.jme3.math.Quaternion;
 import com.jme3.math.Vector3f;
 import com.jme3.scene.Geometry;
@@ -102,7 +103,23 @@ public class Limb {
         lowerPivot.rotate(x, y, z);
     }
 
-    public float getRotationInDegrees() {
+    public void rotateUpperPivotAroundX(float x) {
+        upperPivot.rotate(x, 0, 0);
+    }
+
+    public void rotateLowerPivotAroundX(float x) {
+            lowerPivot.rotate(x, 0, 0);
+    }
+
+    public float getRotationInRadForUpperPivot() {
         return this.upperPivot.getLocalRotation().toAngles(null)[0];
+    }
+
+    public void resetLowerPivot(){
+        lowerPivot.setLocalTranslation(0, -2 * upperPart.box.getYExtent(), 0);
+    }
+
+    public float getRotationInRadForLowerPivot() {
+        return this.lowerPivot.getLocalRotation().toAngles(null)[0];
     }
 }

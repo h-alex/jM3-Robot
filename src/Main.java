@@ -20,7 +20,7 @@ public class Main extends SimpleApplication {
     @Override
     public void simpleInitApp() {
         // Test multiple inputs per mapping
-
+        this.speed = 1.5f;
         cam.setLocation(new Vector3f(10f, 5f, 10f));
         robot = new Robot(rootNode, assetManager, Vector3f.ZERO);
         xyzAxes = new XYZAxes(this.assetManager);
