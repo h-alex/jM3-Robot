@@ -1,4 +1,4 @@
-package Model;
+package Model.Structs;
 
 import com.jme3.material.Material;
 import com.jme3.scene.Geometry;

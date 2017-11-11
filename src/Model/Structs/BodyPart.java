@@ -1,4 +1,4 @@
-package Model;
+package Model.Structs;
 
 import com.jme3.material.Material;
 import com.jme3.math.Vector3f;
@@ -12,7 +12,6 @@ public class BodyPart {
     public static final Vector3f BODY_SIZE = new Vector3f(.75f,1,.3f);
 
     public static final Vector3f ARM_SIZE = new Vector3f(0.2f, .5f, .2f);
-    //public static final Vector3f FOREARM_SIZE = new Vector3f(.3f, .3f, .3f);
     public static final Vector3f FOREARM_SIZE = new Vector3f(.2f, .5f, .2f);
 
     public static final Vector3f FOOT_SIZE = new Vector3f(0.3f, .5f, .3f);

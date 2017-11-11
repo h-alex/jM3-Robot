@@ -1,6 +1,6 @@
 package Model;
 
-import Controller.Robot;
+import Model.Structs.BodyPart;
 import Utils.Utils;
 import com.jme3.asset.AssetManager;
 import com.jme3.material.Material;

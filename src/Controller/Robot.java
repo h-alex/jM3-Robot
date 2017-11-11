@@ -1,7 +1,7 @@
 package Controller;
 
 import Model.Body;
-import Model.BodyPart;
+import Model.Structs.BodyPart;
 import Model.Head;
 import Model.Limb;
 import Utils.Utils;
@@ -11,7 +11,9 @@ import com.jme3.math.Vector3f;
 import com.jme3.scene.Node;
 
 public class Robot {
-    public static final float MOVEMENT_SPEED = .05f;
+    public static final float ROTATION_ANGLE = 1.0f;
+    private static int FORTH = 1;
+    private static int BACK = -1;
 
 
     private Node rootNode; // Center of our robot
@@ -28,7 +30,7 @@ public class Robot {
     private Limb rightFoot;
 
 
-    private float handsAngle = 0f;
+    private float rotationAngle = 0f;
     private float direction = -1;
 
     public Robot(Node node, AssetManager assetManager, Vector3f center) {
@@ -73,51 +75,73 @@ public class Robot {
     }
 
 
-    private void rotateLeftArm(float x, float y, float z) {
-        this.leftArm.rotateUpperPivot(x, y, z);
-        this.leftArm.rotateLowerPivot(-x * 1.5f, -y * 1.5f, -z * 1.5f);
-    }
-
     public void rotate(float x, float y, float z) {
         this.rootNode.rotate(x, y, z);
     }
 
 
     public void moveRobotForward(float speed) {
-        System.out.println("Angle of rotation: \n\t RAD:" + leftArm.getRotationInRadForUpperPivot() + "\n\t DEG:" + leftArm.getRotationInRadForUpperPivot() * FastMath.RAD_TO_DEG);
+        System.out.println("Angle of rotationAngle: \n\t RAD:" + leftArm.getRotationInRadForUpperPivot() + "\n\t DEG:" + leftArm.getRotationInRadForUpperPivot() * FastMath.RAD_TO_DEG);
+        FORTH = 1;
+        BACK = -1;
         moveRobot(speed);
     }
 
 
     public void moveRobotBackward(float speed) {
+        System.out.println("Angle of rotation for Upper: \n\t RAD:" + leftArm.getRotationInRadForUpperPivot() + "\n\t DEG:" + leftArm.getRotationInRadForUpperPivot() * FastMath.RAD_TO_DEG);
+        System.out.println("Angle of rotation for Lower: \n\t RAD:" + leftArm.getRotationInRadForLowerPivot() + "\n\t DEG:" + leftArm.getRotationInRadForLowerPivot() * FastMath.RAD_TO_DEG);
+        BACK = 1;
+        FORTH = -1;
         moveRobot(-1.0f * speed);
     }
 
 
-    private void moveRobot(float speed){
-        handsAngle = leftArm.getRotationInRadForUpperPivot();
-        if (FastMath.abs(handsAngle) > Utils.DEG_45_TO_RAD) {
-            direction *= -1;
-        }
+    private void moveRobot(float speed) {
+
+        rotationAngle = leftArm.getRotationInRadForUpperPivot();
+        changeDirections(rotationAngle);
+
         leftArm.rotateUpperPivotAroundX(direction * speed);
         rightFoot.rotateUpperPivotAroundX(direction * speed);
 
         rightArm.rotateUpperPivotAroundX(-1 * direction * speed);
         leftFoot.rotateUpperPivotAroundX(-1 * direction * speed);
 
-        if (handsAngle < 0) {
-            leftArm.rotateLowerPivotAroundX(direction * speed * 1.5f);
-            rightFoot.rotateLowerPivotAroundX(-1 * direction * speed * 1.5f);
-            rightArm.resetLowerPivot();
-            leftFoot.resetLowerPivot();
-        } else {
-            rightArm.rotateLowerPivotAroundX(-1*direction * speed * 1.5f);
-            leftFoot.rotateLowerPivotAroundX(direction * speed * 1.5f);
+        /* We move the leftArm as long as its rotation is <0
+         */
+        System.out.println("\tLeft arm rotation 1: " + leftArm.getRotationInRadForLowerPivot());
+        /* TODO Why is this not working?
+         * TODO If the lowerPart.angle < 0 and we are moving backward, we shall not move it
+         * TODO If the lowerPart.angle >= 0 and */
 
-            leftArm.resetLowerPivot();
-            rightFoot.resetLowerPivot();
+        if (leftArm.lowerPivotRotationAngle  + direction*speed <=  0
+                && leftArm.upperPivotRotationAngle  < 0 &&
+                leftArm.upperPivotRotationAngle > -Utils.DEG_45_TO_RAD){
+            leftArm.rotateLowerPivotAroundX(speed * direction);
+            rightFoot.rotateLowerPivotAroundX( - speed * direction);
+        } else {
+            rightArm.rotateLowerPivotAroundX(-speed*direction);
+            leftFoot.rotateLowerPivotAroundX(speed * direction);
         }
 
+
+        //    rightArm.rotateLowerPivotAroundX(-1 * direction * speed);
+
         this.rootNode.move(0, 0, speed);
+    }
+
+    /* Here we'll change the direction of the robot, if needed. */
+    private void changeDirections(float rotation) {
+        /* Because all the limbs are moving in the same time, it's enough to know when
+        on of the limbs is out of our limit to change its direction.
+        We'll be using `leftArm` for this
+         */
+        if (rotation > Utils.DEG_45_TO_RAD) {
+            direction = BACK;
+        } else if (rotation < -1 * Utils.DEG_45_TO_RAD) {
+            direction = FORTH;
+        }
+
     }
 }

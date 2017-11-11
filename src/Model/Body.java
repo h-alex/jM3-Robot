@@ -1,6 +1,6 @@
 package Model;
 
-import com.jme3.app.SimpleApplication;
+import Model.Structs.BodyPart;
 import com.jme3.asset.AssetManager;
 import com.jme3.material.Material;
 import com.jme3.math.ColorRGBA;
@@ -9,9 +9,8 @@ import com.jme3.scene.Geometry;
 import com.jme3.scene.Node;
 import com.jme3.scene.shape.Box;
 
-/**
- * Created by alex on 04.11.2017.
- */
+
+
 public class Body {
     private static final ColorRGBA BODY_COLOR = ColorRGBA.Red;
 

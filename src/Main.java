@@ -20,8 +20,8 @@ public class Main extends SimpleApplication {
     @Override
     public void simpleInitApp() {
         // Test multiple inputs per mapping
-        this.speed = 1.5f;
-        cam.setLocation(new Vector3f(10f, 5f, 10f));
+        this.speed = 0.1f;
+        cam.setLocation(new Vector3f(-10f, 5f, 10f));
         robot = new Robot(rootNode, assetManager, Vector3f.ZERO);
         xyzAxes = new XYZAxes(this.assetManager);
         xyzAxes.attachCoordinateAxes(rootNode);
@@ -42,10 +42,10 @@ public class Main extends SimpleApplication {
         public void onAnalog(String name, float value, float tpf) {
             if (name.equals("move_forward")){
                 System.out.println("We are moving forward: name= " + name + " | value= " + value + " | tpf= " + tpf);
-                robot.moveRobotForward(value  * speed);
+                robot.moveRobotForward(speed);
             } else if (name.equals("move_backward")){
                 System.out.println("We are moving backwards: name= " + name + " | value= " + value + " | tpf= " + tpf);
-                robot.moveRobotBackward(value * speed);
+                robot.moveRobotBackward(speed);
             }
         }
     };

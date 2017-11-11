@@ -1,17 +1,18 @@
 package Model;
 
+import Model.Structs.BodyPart;
+import Model.Structs.PivotSphere;
 import Utils.Utils;
 import com.jme3.asset.AssetManager;
 import com.jme3.material.Material;
 import com.jme3.math.ColorRGBA;
-import com.jme3.math.FastMath;
+import com.jme3.math.Matrix3f;
 import com.jme3.math.Quaternion;
 import com.jme3.math.Vector3f;
 import com.jme3.scene.Geometry;
 import com.jme3.scene.Node;
 import com.jme3.scene.shape.Box;
 import com.jme3.scene.shape.Sphere;
-import Utils.XYZAxes;
 
 public class Limb {
     private static final ColorRGBA UPPER_PART_COLOR = ColorRGBA.Brown;
@@ -25,6 +26,11 @@ public class Limb {
 
     private PivotSphere upperSphere;
     private PivotSphere lowerSphere;
+
+    public float lowerPivotRotationAngle = 0;
+    public float upperPivotRotationAngle = 0;
+
+
 
     /**
      * @param startPosition : We start drawing downwards from this position on
@@ -62,6 +68,7 @@ public class Limb {
         /* Lower Sphere */
         lowerPivot = new Node("lowerPivot");
         lowerPivot.setLocalTranslation(0, -2 * upperPartSize.y, 0);
+        lowerPivot.rotate(0f, 0.001f, 0f);
 
         lowerSphere = new PivotSphere();
         lowerSphere.sphere = new Sphere(10, 100, PivotSphere.PIVOT_SPHERE_RADIUS);
@@ -95,31 +102,31 @@ public class Limb {
         node.attachChild(upperPivot);
     }
 
-    public void rotateUpperPivot(float x, float y, float z) {
-        upperPivot.rotate(x, y, z);
-    }
-
-    public void rotateLowerPivot(float x, float y, float z) {
-        lowerPivot.rotate(x, y, z);
-    }
 
     public void rotateUpperPivotAroundX(float x) {
+        this.upperPivotRotationAngle += x;
         upperPivot.rotate(x, 0, 0);
     }
 
     public void rotateLowerPivotAroundX(float x) {
-            lowerPivot.rotate(x, 0, 0);
+        this.lowerPivotRotationAngle += x;
+        lowerPivot.rotate(x,0,0);
     }
 
     public float getRotationInRadForUpperPivot() {
         return this.upperPivot.getLocalRotation().toAngles(null)[0];
     }
 
-    public void resetLowerPivot(){
-        lowerPivot.setLocalTranslation(0, -2 * upperPart.box.getYExtent(), 0);
-    }
+
+    /**
+     * We'll use this function to reset the values of the lower pivot and geometry
+     */
+
+
 
     public float getRotationInRadForLowerPivot() {
         return this.lowerPivot.getLocalRotation().toAngles(null)[0];
     }
+
+
 }

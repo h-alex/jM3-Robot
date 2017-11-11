@@ -9,13 +9,12 @@ import com.jme3.scene.Mesh;
 import com.jme3.scene.Node;
 import com.jme3.scene.debug.Arrow;
 
-/**
- * Created by alex on 04.11.2017.
- */
+
+
 public class XYZAxes {
     private static final int ARROW_THICKNESS = 1;
     private static final float AXE_LENGTH = 7.5f;
-    AssetManager assetManager;
+    private AssetManager assetManager;
 
     public XYZAxes(AssetManager assetManager) {
         this.assetManager = assetManager;
